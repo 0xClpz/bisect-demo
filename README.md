@@ -50,11 +50,16 @@ Date:   Mon Dec 9 18:26:51 2019 +0100
 ```
 
 we can find the hash of a working commit (first commmit: 9b0ca8a8173)
-and the hash of a broken commit, let's say "Adds bisect script: 469f767f3b9bb5"
+and the hash of a broken commit, let's say "Adds bisect instructiosn: f2b836f"
 
 Let's run a few simple commands to start playing with git bisect
 
-Let's create a script to automate git bisect.
+```
+git bisect bad 469f767f3b9bb
+git bisect good f2b836f
+```
+
+Let's create a script to automate git bisect, we'll call it **bisect.sh**
 
 This script needs to do two things:
 - Exit 0 if the commit is "good"
@@ -75,3 +80,33 @@ else
   exit 0
 fi;
 ```
+
+We can now run
+
+```
+git bisect run ./bisect.sh
+```
+
+This should give us the following output
+```
+antonio@Antonios-MacBook-Pro:~/dev/sandbox/git-bisect-demo|86dc236⚡
+⇒  git bisect run ./bisect.sh
+running ./bisect.sh
+This commit is broken
+Bisecting: 0 revisions left to test after this (roughly 0 steps)
+[bf11e29d8dccf14d19bcdba399c9cff844f009b4] Break the app
+running ./bisect.sh
+This commit is broken
+bf11e29d8dccf14d19bcdba399c9cff844f009b4 is the first bad commit
+commit bf11e29d8dccf14d19bcdba399c9cff844f009b4
+Author: Antonio <antonio.root@gmail.com>
+Date:   Mon Dec 9 18:27:17 2019 +0100
+
+    Break the app
+
+ app.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+bisect run success
+```
+
+And there it is! We found the commit that introduced a bug in our code!
