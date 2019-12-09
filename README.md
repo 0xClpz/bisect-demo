@@ -110,3 +110,5 @@ bisect run success
 ```
 
 And there it is! We found the commit that introduced a bug in our code!
+
+Don't forget to run **git bisect reset** afterward to clean up the mess left behind!
